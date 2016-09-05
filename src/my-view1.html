@@ -2,184 +2,187 @@
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view1">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
 
-        padding: 10px;
-      }
+                padding: 10px;
+            }
 
-      paper-card {
-        width: 100%;
-        margin-bottom: 10px;
-      }
-      .horizontal {
-      @apply(--layout-horizontal);
-      }
-      .justified {
-      @apply(--layout-justified);
-      }
-      .amber {
-        background: var(--paper-amber-900);
-      }
-      .lime {
-        background: var(--paper-lime-500);
-      }
-      .cyan {
-        background: var(--paper-cyan-500);
-      }
-      .dark {
-        background: var(--paper-blue-grey-500);
-      }
-      paper-card.dark, paper-card.amber, paper-card.lime, paper-card.cyan {
-        color: white;
-        --paper-card-header-color: white;
-      }
+            paper-card {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .horizontal {
+            @apply(--layout-horizontal);
+            }
+            .justified {
+            @apply(--layout-justified);
+            }
+            .amber {
+                background: var(--paper-amber-900);
+            }
+            .lime {
+                background: var(--paper-lime-500);
+            }
+            .cyan {
+                background: var(--paper-cyan-500);
+            }
+            .dark {
+                background: var(--paper-blue-grey-500);
+            }
+            paper-card.dark, paper-card.amber, paper-card.lime, paper-card.cyan {
+                color: white;
+                --paper-card-header-color: white;
+            }
 
-      paper-icon-button {
-        color: var(--paper-grey-600);
-      }
-      paper-icon-button.white {
-        color: white !important;
-      }
+            paper-icon-button {
+                color: var(--paper-grey-600);
+            }
+            paper-icon-button.white {
+                color: white !important;
+            }
 
-      paper-card.rate { @apply(--layout-horizontal); }
-      .rate-image {
-        width: 100px;
-        height: 170px;
-        background-size: cover;
-      }
-      .rate-content {
-      @apply(--layout-flex);
-        float: left;
-      }
-      .rate-header { @apply(--paper-font-headline);
-      font-size: 1.2rem;
-      font-weight: bold;}
-      .rate-name { color: var(--paper-grey-600); margin: 10px 0; }
-      paper-icon-button.rate-icon {
-        --iron-icon-fill-color: white;
-        --iron-icon-stroke-color: var(--paper-grey-600);
-      }
-      .label {
-        display: inline-block;
-        padding: 3px 4px;
-        font-size: 12px;
-        font-weight: 600;
-        line-height: 1;
-        color: #fff;
-        border-radius: 2px;
-        box-shadow: inset 0 -1px 0 rgba(0,0,0,0.12);
-      }
+            paper-card.rate { @apply(--layout-horizontal); }
+            .rate-image {
+                width: 100px;
+                height: 170px;
+                background-size: cover;
+            }
+            .rate-content {
+            @apply(--layout-flex);
+                float: left;
+            }
+            .rate-header { @apply(--paper-font-headline);
+                font-size: 1.2rem;
+                font-weight: bold;}
+            .rate-name { color: var(--paper-grey-600); margin: 10px 0; }
+            paper-icon-button.rate-icon {
+                --iron-icon-fill-color: white;
+                --iron-icon-stroke-color: var(--paper-grey-600);
+            }
+            .label {
+                display: inline-block;
+                padding: 3px 4px;
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 1;
+                color: #fff;
+                border-radius: 2px;
+                box-shadow: inset 0 -1px 0 rgba(0,0,0,0.12);
+            }
 
-      marked-element {
-        display: block;
-        background-color: white);
-        padding: 10px 30px;
-        margin-bottom: 10px;
-      }
-      .markdown-html.custom p {
-        padding-left: 24px;
-      }
+            marked-element {
+                display: block;
+                background-color: white);
+                padding: 10px 30px;
+                margin-bottom: 10px;
+            }
+            .markdown-html.custom p {
+                padding-left: 24px;
+            }
 
-      paper-button.custom {
-        --paper-button-ink-color: var(--paper-pink-a200);
-      /* These could also be individually defined for each of the
-        specific css classes, but we'll just do it once as an example */
+            paper-button.custom {
+                --paper-button-ink-color: var(--paper-pink-a200);
+            /* These could also be individually defined for each of the
+              specific css classes, but we'll just do it once as an example */
 
-      paper-button.custom:hover {
-        background-color: var(--paper-indigo-100);
-      }
-      paper-button.pink {
-        color: var(--paper-pink-a200);
+            paper-button.custom:hover {
+                background-color: var(--paper-indigo-100);
+            }
+            paper-button.pink {
+                color: var(--paper-pink-a200);
 
-      }
-      paper-button.indigo {
-        background-color: var(--paper-indigo-500);
-        color: white;
-      }
-      paper-button.green {
-        background-color: var(--paper-green-500);
-        color: white;
-      }
-      paper-button.green[active] {
-        background-color: var(--paper-red-500);
-      }
-      paper-button.disabled {
-        color: white;
-      }
-    </style>
-
-
-
-    <iron-ajax auto
-               url="{{url}}"
-               params=''
-               handle-as="json"
-               last-response="{{ajaxResponse}}"></iron-ajax>
-
-    <template is="dom-repeat" items="[[ajaxResponse]]">
+            }
+            paper-button.indigo {
+                background-color: var(--paper-indigo-500);
+                color: white;
+            }
+            paper-button.green {
+                background-color: var(--paper-green-500);
+                color: white;
+            }
+            paper-button.green[active] {
+                background-color: var(--paper-red-500);
+            }
+            paper-button.disabled {
+                color: white;
+            }
+        </style>
 
 
-      <paper-card class="rate">
-        <div class="rate-content">
-          <div class="card-content">
-              <div class="rate-header">[[item.title]]</div>
-              <div><a href="{{item.html_url}}" target="_blank" >[[item.html_url]]</a></div>
-              <div class="rate-name"><b>[[item.user.login]]</b> ultimo aggiornamento il [[item.updated_at]] |
-                Status: <div class="label" style="background-color: green;"> [[item.state]]</div> | Label:
-                <template is="dom-repeat" items="[[item.labels]]">
-                  <a class="label" href="{{item.name}}" target="_blank" style$="background-color: #{{item.color}}; color:#FFFFFF">{{item.name}}</a>
-                </template>
-              </div>
-                <marked-element markdown$="{{item.body}}">
-                  <div class="markdown-html"></div>
-                </marked-element>
-          </div>
 
-          <div class="card-actions">
-            <paper-button class="custom pink">Mappa</paper-button>
-            <paper-icon-button src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></paper-icon-button>
-          </div>
-        </div>
-        <br />
-      </paper-card>
+        <iron-ajax auto
+                   url="{{url}}"
+                   params=''
+                   handle-as="json"
+                   last-response="{{ajaxResponse}}"></iron-ajax>
+
+        <template is="dom-repeat" items="[[ajaxResponse]]">
+
+
+            <paper-card class="rate">
+                <div class="rate-content">
+                    <div class="card-content">
+                        <div class="rate-header">[[item.title]] # [[item.number]]</div>
+                        <div><a href="{{item.html_url}}" target="_blank" >[[item.html_url]]</a></div>
+                        <div class="rate-name"><b>[[item.user.login]]</b> ultimo aggiornamento il [[item.updated_at]] |
+                            Status: <div class="label" style="background-color: green;"> [[item.state]]</div> | Label:
+                            <template is="dom-repeat" items="[[item.labels]]">
+                                <a class="label" href="{{item.name}}" target="_blank" style$="background-color: #{{item.color}}; color:#FFFFFF">{{item.name}}</a>
+                            </template>
+                        </div>
+                        <marked-element markdown$="{{item.body}}">
+                            <div class="markdown-html"></div>
+                        </marked-element>
+
+                        <div class="card-actions">
+                            <paper-button class="custom pink">Mappa</paper-button>
+                            <paper-icon-button src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></paper-icon-button>
+
+                            <paper-icon-button icon="communication:comment" title="Comment"></paper-icon-button>
+                            <b>Commenti: [[item.comments]]</b>
+
+                        </div>
+                    </div>
+                </div>
+
+            </paper-card>
+
+        </template>
+
+
+
+
 
     </template>
 
-
-
-
-
-  </template>
-
-  <script>
-    Polymer({
-      is: 'my-view1',
-      properties: {
-        owner: {
-          value: 'mfortini',
-          notify: true
-        },
-        repo: {
-          value: 'issuetraining',
-          notify: true
-        },
-        url: {
-          computed: 'computeUrl(owner, repo)'
-        },
-        options: {
-          computed: 'computeOptions(state, page)'
-        }
-      },
-
-      computeUrl: function(owner, repo) {
-        return ['https://api.github.com/repos', owner, repo, 'issues'].join('/');
-      },
-      computeOptions: function(state, page) {
-        return {state: state, page: page};
-      }
-    });
-  </script>
+    <script>
+        Polymer({
+            is: 'my-view1',
+            properties: {
+                owner: {
+                    value: 'emergenzeHack',
+                    notify: true
+                },
+                repo: {
+                    value: 'terremotocentro',
+                    notify: true
+                },
+                url: {
+                    computed: 'computeUrl(owner, repo)'
+                },
+                options: {
+                    computed: 'computeOptions(state, page)'
+                }
+            },
+            computeUrl: function(owner, repo) {
+                return ['https://api.github.com/repos', owner, repo, 'issues'].join('/');
+            },
+            computeOptions: function(state, page) {
+                return {state: state, page: page};
+            }
+        });
+    </script>
 </dom-module>
