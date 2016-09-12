@@ -69,8 +69,8 @@
             .label {
                 display: inline-block;
                 padding: 3px 4px;
-                font-size: 12px;
-                font-weight: 600;
+                font-size: 13px;
+                font-weight: bold;
                 line-height: 1;
                 color: #fff;
                 border-radius: 2px;
@@ -137,7 +137,7 @@
                         <div class="rate-name"><b>[[item.user.login]]</b> ultimo aggiornamento il [[item.updated_at]] |
                             Status: <div class="label" style="background-color: green;"> [[item.state]]</div> | Label:
                             <template is="dom-repeat" items="[[item.labels]]">
-                                <a class="label" href="{{item.name}}" target="_blank" style$="background-color: #{{item.color}}; color:{{computeTextColor(item.color)}}">{{item.name}}</a>
+                                <a class="label" href="{{item.name}}" target="_blank" style$="background-color: #{{item.color}}; color:{{computeTextColor(item.color)}}; font-weight: bold;">{{item.name}}</a>
                             </template>
                         </div>
                         <marked-element markdown$="{{item.body}}">
