@@ -11,11 +11,22 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
 <link rel="import" href="../bower_components/paper-styles/color.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/marked-element/marked-element.html">
+
+<link rel="import" href="../bower_components/iron-icons/image-icons.html">
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../bower_components/iron-icons/notification-icons.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">">
+
 <link rel="import" href="my-icons.html">
 
 <dom-module id="my-app">
@@ -57,7 +68,36 @@
 
         font-weight: bold;
       }
+
+      paper-dialog.colored {
+        border: 2px solid;
+        border-color: var(--paper-green-500);
+        background-color: var(--paper-light-green-50);
+        color: var(--paper-green-500);
+      }
+
+      paper-dialog.size-position {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        width: 350px;
+        height: 400px;
+        overflow: auto;
+        padding: 16px;
+      }
     </style>
+
+
+    <iron-ajax
+            method="POST"
+            id="ajaxPost"
+            url="{{url}}"
+            headers='{"Authorization": "Basic Zml6emk6OTY4YjkyMTMzYzY3YzBmYmNhZjNiMDc5YzIzMDBhN2YzMjdhY2M0YQ=="}'
+            body='{"title": "{{title}}",  "body": "{{body}}", "labels": ["{{labels}}"] }'
+            handle-as="json"
+            content-type="application/json"
+            on-response="_handleIssueResponse"
+            last-response="{{ajaxResponse1}}"></iron-ajax>
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -81,7 +121,10 @@
         <app-header fixed condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <div main-title>Segnalazioni TerremotoCentroItalia - Github - List</div>
+            <div main-title>Github - Issues management for {{owner}}/{{repo}}</div>
+            <paper-icon-button icon="image:add-to-photos" on-tap="_createNewIssue" raised></paper-icon-button>
+            <paper-icon-button icon="notification:sync" on-tap="_refreshMyView1"></paper-icon-button>
+
           </app-toolbar>
         </app-header>
 
@@ -90,13 +133,28 @@
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
-          <my-view1 name="view1" owner="{{owner}}" repo="{{repo}}"></my-view1>
-
+            <my-view1 id="view1" name="view1" owner="{{owner}}" repo="{{repo}}"></my-view1>
 
           <my-view404 name="view404"></my-view404>
         </iron-pages>
+
       </app-header-layout>
     </app-drawer-layout>
+
+    <paper-dialog id="newIssue" class="size-position">
+      <h2>Aggiungi una issue</h2>
+      <paper-dropdown-menu label="Value">
+        <paper-input label="Title" value="{{title}}" aria-required="true"></paper-input>
+        <paper-textarea label="Body della issue" value="{{body}}"></paper-textarea>
+        <paper-input label="label here ... comma separated" value="{{labels}}"></paper-input>
+        <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm autofocus on on-tap="_sendNewIssue" raised>OK</paper-button>
+        </div>
+      </paper-dropdown-menu>
+    </paper-dialog>
+
+    <paper-toast id="toast" text="Issue created! Thank"></paper-toast>
   </template>
 
   <script>
@@ -108,6 +166,17 @@
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
+        },
+        owner: {
+          value: 'fizzi',
+          notify: true
+        },
+        repo: {
+          value: 'issues-gh-list',
+          notify: true
+        },
+        url: {
+          computed: 'computeUrl(owner, repo)'
         }
       },
 
@@ -118,7 +187,9 @@
       _routePageChanged: function(page) {
         this.page = page || 'view1';
       },
-
+      computeUrl: function(owner, repo) {
+        return ['https://api.github.com/repos', owner, repo, 'issues'].join('/');
+      },
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
         var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
@@ -127,7 +198,36 @@
 
       _showPage404: function() {
         this.page = 'view404';
-      }
+      },
+
+      _refreshMyView1: function(){
+        console.log("Refresh")
+        this.$.view1.reload=true;
+      },
+
+      _createNewIssue: function(){
+        console.log("OpenDialog")
+        this.title="";
+        this.body="";
+        this.labels="";
+        this.$.newIssue.open();
+
+      },
+
+      _sendNewIssue: function(){
+        console.log("Sending...")
+        this.$.ajaxPost.generateRequest();
+
+      },
+      _handleIssueResponse: function (event) {
+        console.log("Issue created!")
+        this._refreshMyView1();
+        this.$.toast.open();
+      },
+
+
+
+
     });
   </script>
 </dom-module>

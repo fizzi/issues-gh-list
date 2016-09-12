@@ -1,4 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view1">
@@ -113,16 +117,19 @@
 
 
 
-        <iron-ajax auto
+        <iron-ajax
+                   id="ajax"
                    url="{{url}}"
                    params=''
                    handle-as="json"
                    last-response="{{ajaxResponse}}"></iron-ajax>
 
-        <template is="dom-repeat" items="[[ajaxResponse]]">
 
 
-            <paper-card class="rate">
+        <template id="issues" is="dom-repeat" items="[[ajaxResponse]]">
+
+
+            <paper-card class="rate" id="card">
                 <div class="rate-content">
                     <div class="card-content">
                         <div class="rate-header">[[item.title]] # [[item.number]]</div>
@@ -130,7 +137,7 @@
                         <div class="rate-name"><b>[[item.user.login]]</b> ultimo aggiornamento il [[item.updated_at]] |
                             Status: <div class="label" style="background-color: green;"> [[item.state]]</div> | Label:
                             <template is="dom-repeat" items="[[item.labels]]">
-                                <a class="label" href="{{item.name}}" target="_blank" style$="background-color: #{{item.color}}; color:#FFFFFF">{{item.name}}</a>
+                                <a class="label" href="{{item.name}}" target="_blank" style$="background-color: #{{item.color}}; color:#000">{{item.name}}</a>
                             </template>
                         </div>
                         <marked-element markdown$="{{item.body}}">
@@ -138,11 +145,9 @@
                         </marked-element>
 
                         <div class="card-actions">
-                            <paper-button class="custom pink">Mappa</paper-button>
-                            <paper-icon-button src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></paper-icon-button>
+                            <paper-icon-button src="{{item.user.avatar_url}}" alt="@{{item.user.login}}" title="@{{item.user.login}}" style="width: 64px; height: 64px"></paper-icon-button>
 
-                            <paper-icon-button icon="communication:comment" title="Comment"></paper-icon-button>
-                            <b>Commenti: [[item.comments]]</b>
+                            <b><a  href="{{item.html_url}}" target="_blank">Commenti: [[item.comments]]</a></b>
 
                         </div>
                     </div>
@@ -150,10 +155,8 @@
 
             </paper-card>
 
+
         </template>
-
-
-
 
 
     </template>
@@ -161,13 +164,22 @@
     <script>
         Polymer({
             is: 'my-view1',
+
+            behaviors: [
+                Polymer.NeonAnimationRunnerBehavior
+            ],
+
+
             properties: {
+                opened: {
+                    type: Boolean
+                },
                 owner: {
-                    value: 'emergenzeHack',
+                    value: 'fizzi',
                     notify: true
                 },
                 repo: {
-                    value: 'terremotocentro',
+                    value: 'issues-gh-list',
                     notify: true
                 },
                 url: {
@@ -175,6 +187,25 @@
                 },
                 options: {
                     computed: 'computeOptions(state, page)'
+                },
+                reload: {
+                    value: '',
+                    observer: 'refreshFilter'
+                },
+                animationConfig: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            'entry': [{
+                                name: 'fade-in-animation',
+                                node: this
+                            }],
+                            'exit': [{
+                                name: 'fade-out-animation',
+                                node: this
+                            }]
+                        }
+                    }
                 }
             },
             computeUrl: function(owner, repo) {
@@ -182,7 +213,27 @@
             },
             computeOptions: function(state, page) {
                 return {state: state, page: page};
+            },
+            refreshFilter: function() {
+                if(this.reload === '' || this.reload !== false) {
+                    this.$.ajax.generateRequest();
+                    this.$.issues.render();
+
+                    this.reload = false;
+                }
+                this.show();
+
+            },
+
+            show: function() {
+                this.opened = true;
+                this.playAnimation('entry');
             }
         });
+
+
+
+
+
     </script>
 </dom-module>
