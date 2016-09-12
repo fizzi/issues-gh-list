@@ -91,9 +91,9 @@
     <iron-ajax
             method="POST"
             id="ajaxPost"
-            url="{{url}}"
-            headers='{"Authorization": "Basic Zml6emk6OTY4YjkyMTMzYzY3YzBmYmNhZjNiMDc5YzIzMDBhN2YzMjdhY2M0YQ=="}'
-            body='{"title": "{{title}}",  "body": "{{body}}", "labels": ["{{labels}}"] }'
+            url="{{url}}?title={{title}}&description={{description}}&labels={{labels}}"
+            headers='{"PRIVATE-TOKEN": "uUtEd92wBcnMn_AtMuxK"}'
+
             handle-as="json"
             content-type="application/json"
             on-response="_handleIssueResponse"
@@ -145,7 +145,7 @@
       <h2>Aggiungi una issue</h2>
       <paper-dropdown-menu label="Value">
         <paper-input label="Title" value="{{title}}" aria-required="true"></paper-input>
-        <paper-textarea label="Body della issue" value="{{body}}"></paper-textarea>
+        <paper-textarea label="Body della issue" value="{{description}}"></paper-textarea>
         <paper-input label="label here ... comma separated" value="{{labels}}"></paper-input>
         <div class="buttons">
           <paper-button dialog-dismiss>Cancel</paper-button>
@@ -168,11 +168,11 @@
           observer: '_pageChanged'
         },
         owner: {
-          value: 'fizzi',
+          value: 'projects',
           notify: true
         },
         repo: {
-          value: 'issues-gh-list',
+          value: '100',
           notify: true
         },
         url: {
@@ -188,7 +188,7 @@
         this.page = page || 'view1';
       },
       computeUrl: function(owner, repo) {
-        return ['https://api.github.com/repos', owner, repo, 'issues'].join('/');
+        return ['https://dev.geosdi.org/api/v3', owner, repo, 'issues'].join('/');
       },
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
@@ -208,7 +208,7 @@
       _createNewIssue: function(){
         console.log("OpenDialog")
         this.title="";
-        this.body="";
+        this.description="";
         this.labels="";
         this.$.newIssue.open();
 

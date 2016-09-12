@@ -119,9 +119,10 @@
 
         <iron-ajax
                    id="ajax"
-                   url="{{url}}"
+                   url="{{url}}?state=opened"
                    params=''
                    handle-as="json"
+                   headers='{"PRIVATE-TOKEN": "xxxxxxxxxxxx"}'
                    last-response="{{ajaxResponse}}"></iron-ajax>
 
 
@@ -132,20 +133,20 @@
             <paper-card class="rate" id="card">
                 <div class="rate-content">
                     <div class="card-content">
-                        <div class="rate-header">[[item.title]] # [[item.number]]</div>
-                        <div><a href="{{item.html_url}}" target="_blank" >[[item.html_url]]</a></div>
+                        <div class="rate-header">[[item.title]] # [[item.iid]]</div>
+                        <div><a href="{{url}}/{{item.iid}}" target="_blank" >{{url}}/{{item.iid}}</a></div>
                         <div class="rate-name"><b>[[item.user.login]]</b> ultimo aggiornamento il [[item.updated_at]] |
                             Status: <div class="label" style="background-color: green;"> [[item.state]]</div> | Label:
                             <template is="dom-repeat" items="[[item.labels]]">
-                                <a class="label" href="{{item.name}}" target="_blank" style$="background-color: #{{item.color}}; color:#000">{{item.name}}</a>
+                                <a class="label" href="{{item.name}}" target="_blank" style$="background-color: #{{item.color}}; color:#000">{{item}}</a>
                             </template>
                         </div>
-                        <marked-element markdown$="{{item.body}}">
+                        <marked-element markdown$="{{item.description}}">
                             <div class="markdown-html"></div>
                         </marked-element>
 
                         <div class="card-actions">
-                            <paper-icon-button src="{{item.user.avatar_url}}" alt="@{{item.user.login}}" title="@{{item.user.login}}" style="width: 64px; height: 64px"></paper-icon-button>
+                            <paper-icon-button src="{{item.author.avatar_url}}" alt="@{{item.user.login}}" title="@{{item.user.login}}" style="width: 64px; height: 64px"></paper-icon-button>
 
                             <b><a  href="{{item.html_url}}" target="_blank">Commenti: [[item.comments]]</a></b>
 
@@ -175,11 +176,11 @@
                     type: Boolean
                 },
                 owner: {
-                    value: 'fizzi',
+                    value: 'projects',
                     notify: true
                 },
                 repo: {
-                    value: 'issues-gh-list',
+                    value: '100',
                     notify: true
                 },
                 url: {
@@ -209,7 +210,7 @@
                 }
             },
             computeUrl: function(owner, repo) {
-                return ['https://api.github.com/repos', owner, repo, 'issues'].join('/');
+                return ['https://dev.geosdi.org/api/v3', owner, repo, 'issues'].join('/');
             },
             computeOptions: function(state, page) {
                 return {state: state, page: page};
